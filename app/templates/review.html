@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Human Review - HR Automation Pipeline</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1em;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-top: 10px;
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .summary-section {
+            background: #f0fdf4;
+            border-left: 4px solid #11998e;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .summary-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .summary-section h3::before {
+            content: "📊";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .summary-content {
+            color: #555;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        .form-section {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .form-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: 600;
+            font-size: 1em;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: inherit;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #11998e;
+            box-shadow: 0 0 0 3px rgba(17, 153, 142, 0.1);
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: inherit;
+            resize: vertical;
+            transition: all 0.3s ease;
+            min-height: 120px;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #11998e;
+            box-shadow: 0 0 0 3px rgba(17, 153, 142, 0.1);
+        }
+
+        .decision-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .decision-option {
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .decision-option:hover {
+            border-color: #11998e;
+            background: #f0fdf4;
+        }
+
+        .decision-option input[type="radio"] {
+            display: none;
+        }
+
+        .decision-option input[type="radio"]:checked + label {
+            color: #11998e;
+            font-weight: 600;
+        }
+
+        .decision-option:has(input[type="radio"]:checked) {
+            border-color: #11998e;
+            background: #f0fdf4;
+        }
+
+        .decision-option label {
+            cursor: pointer;
+            display: block;
+            margin: 0;
+        }
+
+        .decision-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(17, 153, 142, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .info-box {
+            background: #dcfce7;
+            border-left: 4px solid #11998e;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 25px;
+        }
+
+        .info-box p {
+            color: #555;
+            margin: 0;
+            font-size: 0.95em;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .decision-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← Back to Home</a>
+
+        <div class="header">
+            <h1>👤 Human Review</h1>
+            <p>Review AI Evaluation and Make Final Decision</p>
+            <span class="status-badge">⚠️ Needs Human Review</span>
+        </div>
+
+        <div class="info-box">
+            <p><strong>ℹ️ Note:</strong> The AI has flagged this candidate for manual review. Please review the evaluation summary below and make your final decision.</p>
+        </div>
+
+        <div class="summary-section">
+            <h3>AI Evaluation Summary</h3>
+            <div class="summary-content">{{ summary or "No summary available." }}</div>
+        </div>
+
+        <form action="/review/{{ candidate_id }}" method="post" id="reviewForm">
+            <div class="form-section">
+                <h3>📋 Final Decision</h3>
+                
+                <div class="decision-options">
+                    <div class="decision-option">
+                        <input type="radio" name="decision" id="shortlist" value="SHORTLIST" required>
+                        <label for="shortlist">
+                            <div class="decision-icon">✅</div>
+                            <strong>Shortlist</strong>
+                            <div style="font-size: 0.9em; margin-top: 5px; color: #666;">Approve candidate</div>
+                        </label>
+                    </div>
+                    <div class="decision-option">
+                        <input type="radio" name="decision" id="reject" value="REJECT" required>
+                        <label for="reject">
+                            <div class="decision-icon">❌</div>
+                            <strong>Reject</strong>
+                            <div style="font-size: 0.9em; margin-top: 5px; color: #666;">Decline candidate</div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>💬 Additional Comments</h3>
+                <div class="form-group">
+                    <label for="comment">Review Notes (Optional)</label>
+                    <textarea 
+                        name="comment" 
+                        id="comment"
+                        rows="4" 
+                        placeholder="Add any additional notes, concerns, or observations about this candidate..."
+                    ></textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                Submit Review & Send Email
+            </button>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('reviewForm');
+        const submitBtn = document.querySelector('.submit-btn');
+
+        form.addEventListener('submit', function(e) {
+            const decision = document.querySelector('input[name="decision"]:checked');
+            if (!decision) {
+                e.preventDefault();
+                alert('Please select a decision (Shortlist or Reject)');
+                return;
+            }
+
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processing...';
+        });
+
+        // Add visual feedback for radio selection
+        document.querySelectorAll('.decision-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const radio = this.querySelector('input[type="radio"]');
+                radio.checked = true;
+                
+                // Update visual state
+                document.querySelectorAll('.decision-option').forEach(opt => {
+                    opt.style.borderColor = '#e0e0e0';
+                    opt.style.background = 'white';
+                });
+                this.style.borderColor = '#11998e';
+                this.style.background = '#f0fdf4';
+            });
+        });
+    </script>
+</body>
+</html>

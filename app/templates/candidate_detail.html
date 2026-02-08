@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate #{{ candidate.id }} - HR Automation Pipeline</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2em;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(17, 153, 142, 0.4);
+        }
+
+        .info-section {
+            background: #f0fdf4;
+            border-left: 4px solid #11998e;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .info-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .info-item label {
+            display: block;
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .info-item .value {
+            color: #333;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-finalized {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .decision-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .decision-shortlist {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .decision-reject {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .decision-review {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .content-section {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .content-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .content-text {
+            color: #555;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .evaluation-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .eval-item {
+            background: #f0fdf4;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .eval-item label {
+            display: block;
+            color: #666;
+            font-size: 0.85em;
+            margin-bottom: 8px;
+        }
+
+        .eval-item .value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #11998e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👤 Candidate #{{ candidate.id }}</h1>
+            <a href="/candidates" class="back-link">← Back to List</a>
+        </div>
+
+        <div class="info-section">
+            <h3>📋 Candidate Information</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>Status</label>
+                    <div class="value">
+                        <span class="status-badge {% if candidate.status == 'NEEDS_HUMAN_REVIEW' %}status-pending{% else %}status-finalized{% endif %}">
+                            {{ candidate.status }}
+                        </span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <label>Agent Decision</label>
+                    <div class="value">
+                        {% if candidate.agent_decision %}
+                        <span class="decision-badge {% if candidate.agent_decision == 'SHORTLIST' %}decision-shortlist{% elif candidate.agent_decision == 'REJECT' %}decision-reject{% else %}decision-review{% endif %}">
+                            {{ candidate.agent_decision }}
+                        </span>
+                        {% else %}
+                        <span style="color: #999;">-</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="info-item">
+                    <label>Final Decision</label>
+                    <div class="value">
+                        {% if candidate.final_decision %}
+                        <span class="decision-badge {% if candidate.final_decision == 'SHORTLIST' %}decision-shortlist{% else %}decision-reject{% endif %}">
+                            {{ candidate.final_decision }}
+                        </span>
+                        {% else %}
+                        <span style="color: #999;">Pending</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="info-item">
+                    <label>Created</label>
+                    <div class="value">{{ candidate.created_at.strftime('%Y-%m-%d %H:%M:%S') if candidate.created_at else '-' }}</div>
+                </div>
+            </div>
+        </div>
+
+        {% if evaluation %}
+        <div class="content-section">
+            <h3>📊 AI Evaluation Details</h3>
+            <div class="evaluation-details">
+                {% if evaluation.skills_match is not none %}
+                <div class="eval-item">
+                    <label>Skills Match</label>
+                    <div class="value">{{ "%.1f"|format(evaluation.skills_match * 100) }}%</div>
+                </div>
+                {% endif %}
+                {% if evaluation.experience_years is not none %}
+                <div class="eval-item">
+                    <label>Experience</label>
+                    <div class="value">{{ evaluation.experience_years }} yrs</div>
+                </div>
+                {% endif %}
+                {% if evaluation.domain_relevance is not none %}
+                <div class="eval-item">
+                    <label>Domain Relevance</label>
+                    <div class="value">{{ "%.1f"|format(evaluation.domain_relevance * 100) }}%</div>
+                </div>
+                {% endif %}
+                {% if evaluation.confidence is not none %}
+                <div class="eval-item">
+                    <label>Confidence</label>
+                    <div class="value">{{ "%.1f"|format(evaluation.confidence * 100) }}%</div>
+                </div>
+                {% endif %}
+            </div>
+            {% if evaluation.summary %}
+            <div style="margin-top: 20px;">
+                <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 600;">Summary:</label>
+                <div class="content-text">{{ evaluation.summary }}</div>
+            </div>
+            {% endif %}
+            {% if evaluation.red_flags %}
+            <div style="margin-top: 20px;">
+                <label style="display: block; margin-bottom: 10px; color: #721c24; font-weight: 600;">⚠️ Red Flags:</label>
+                <ul style="color: #721c24; padding-left: 20px;">
+                    {% for flag in evaluation.red_flags %}
+                    <li>{{ flag }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="content-section">
+            <h3>📄 Resume Text</h3>
+            <div class="content-text">{{ candidate.resume_text[:1000] }}{% if candidate.resume_text|length > 1000 %}... (truncated){% endif %}</div>
+        </div>
+
+        <div class="content-section">
+            <h3>💼 Job Description</h3>
+            <div class="content-text">{{ candidate.job_description }}</div>
+        </div>
+
+        {% if candidate.status == 'NEEDS_HUMAN_REVIEW' %}
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="/review/{{ candidate.id }}" class="back-link" style="display: inline-block;">Review This Candidate</a>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
