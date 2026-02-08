@@ -2,8 +2,6 @@
 
 An intelligent HR automation system that uses AI to evaluate resumes, make initial hiring decisions, and automate email communications. The system includes a human-in-the-loop review process for cases that need additional scrutiny.
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com)
-
 ## Features
 
 - **Resume Processing**: PDF text extraction with OCR fallback for scanned documents
@@ -16,25 +14,12 @@ An intelligent HR automation system that uses AI to evaluate resumes, make initi
 ## Prerequisites
 
 - Python 3.8 or higher
-- PostgreSQL database
+- PostgreSQL database (optional - defaults to SQLite for local development)
 - OpenAI API key
 - Tesseract OCR (for PDF OCR functionality)
 - SMTP email account (Gmail, Outlook, etc.)
 
-## Quick Start
-
-### Deploy on Render (Recommended)
-
-1. Fork this repository
-2. Sign up at [Render.com](https://render.com)
-3. Create a new Web Service from your GitHub repository
-4. Render will automatically detect `render.yaml` and configure everything
-5. Add your environment variables in Render dashboard
-6. Deploy!
-
-See [RENDER_DEPLOYMENT.md](./RENDER_DEPLOYMENT.md) for detailed deployment instructions.
-
-### Local Installation
+## Installation
 
 ### 1. Clone the repository
 
@@ -180,11 +165,7 @@ Resume_Analyzer/
 │       ├── candidates.html # Candidates dashboard
 │       └── candidate_detail.html # Candidate details page
 ├── requirements.txt         # Python dependencies
-├── Procfile                # Render deployment configuration
-├── render.yaml             # Render Blueprint configuration
-├── runtime.txt             # Python version specification
 ├── init_db.py              # Database initialization script
-├── RENDER_DEPLOYMENT.md    # Render deployment guide
 └── README.md               # This file
 ```
 
